@@ -1,0 +1,40 @@
+name: Cache, Build & Test
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  test:
+
+    name: Cache, Build & Test
+    env:
+      SCHEME: "KonboardingExample"
+      DEVICE: "iPhone 11"
+      DERIVED_DATA_PATH: "DerivedData"
+
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        destination: ['platform=iOS Simulator,OS=14.4,name=iPhone 12']
+        
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache
+      - uses: actions/cache@v2
+           with:
+           id: spm-cache
+           path: .build
+           key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+           restore-keys: |
+             ${{ runner.os }}-spm-
+             
+           - run: |
+             pwd
+             swift package init --type library
+             xcodebuild clean
+             xcodebuild test -workspace KonboardingExample.xcworkspace -scheme KonboardingExample CODE_SIGN_ENTITLEMENTS= DEVELOPMENT_TEAM= CODE_SIGNING_ALLOWED=NO
