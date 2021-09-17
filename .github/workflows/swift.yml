@@ -37,4 +37,4 @@ jobs:
              pwd
              swift package init --type library
              xcodebuild clean
-             xcodebuild test -workspace KonboardingExample.xcworkspace -scheme KonboardingExample CODE_SIGN_ENTITLEMENTS= DEVELOPMENT_TEAM= CODE_SIGNING_ALLOWED=NO
+             xcodebuild clean test -project KonboardingExample.xcodeproj -scheme KonboardingExample -destination "${destination}" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
